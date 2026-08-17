@@ -13,6 +13,7 @@ build/
 
 # Uploaded files (user-generated content)
 server/uploads/
+server/.tmp/
 
 # OS / Editor
 .DS_Store

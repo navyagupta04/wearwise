@@ -9,3 +9,4 @@ CREATE TABLE IF NOT EXISTS chat_messages (id uuid PRIMARY KEY DEFAULT uuid_gener
 ALTER TABLE sessions ADD COLUMN IF NOT EXISTS gender text CHECK(gender IN ('woman','man','nonbinary','prefer_not_to_say'));
 ALTER TABLE search_results ADD COLUMN IF NOT EXISTS gender text CHECK(gender IN ('woman','man','unisex'));
 ALTER TABLE search_results ADD COLUMN IF NOT EXISTS occasion_tags text;
+ALTER TABLE search_results ADD COLUMN IF NOT EXISTS vto_image_url text;
