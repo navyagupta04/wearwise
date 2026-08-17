@@ -1,0 +1,1 @@
+export default function Header({onHome}) { return <header className="flex justify-between items-center py-6"><button onClick={onHome} className="font-display text-3xl tracking-tight">wearwise<span className="text-rose">.</span></button><span className="text-xs tracking-[.2em] uppercase text-stone-500">AI personal fitting room</span></header> }

@@ -1,0 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+@tailwind base; @tailwind components; @tailwind utilities;
+@layer base { body { @apply bg-[#fcfaf8] text-ink font-sans; } button { @apply transition duration-200; } }
+@layer components { .btn { @apply rounded-full px-5 py-3 font-semibold text-sm; } .btn-primary { @apply btn bg-ink text-white hover:bg-rose; } .btn-soft { @apply btn bg-white border border-stone-200 hover:border-rose; } .card { @apply rounded-3xl bg-white border border-stone-100 shadow-[0_10px_35px_rgba(68,40,30,.06)]; } }

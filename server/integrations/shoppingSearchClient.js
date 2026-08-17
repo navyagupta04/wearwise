@@ -1,0 +1,2 @@
+import axios from 'axios';
+export async function searchShopping(query) { const key = process.env.SHOPPING_SEARCH_API_KEY; if (!key || key.startsWith('replace_')) return []; const { data } = await axios.get('https://serpapi.com/search.json', { params:{ engine:'google_shopping', q:query, api_key:key } }); return (data.shopping_results || []).map((x,i) => ({ name:x.title, source_site:x.source, image_url:x.thumbnail, buy_url:x.product_link || x.link || x.serpapi_product_api, price:x.price, category:'apparel', color:'', rank:i+1 })); }

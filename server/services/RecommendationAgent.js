@@ -1,0 +1,9 @@
+const colorWords = ['black','white','blue','navy','green','emerald','red','pink','gold','beige','brown','purple'];
+const occasionMap = { wedding: ['dress','suit','blazer','shirt','heels'], office: ['shirt','blazer','trousers','dress'], party: ['dress','top','jumpsuit','shirt','blazer'], casual: ['top','jeans','jacket','tshirt'], dinner: ['dress','top','blazer','shirt'], interview: ['blazer','shirt','trousers','dress'], date: ['dress','top','jumpsuit','shirt'] };
+export function recommend(products, occasion = '', description = '', undertone = 'neutral', gender = 'prefer_not_to_say', limit = 6) {
+ const text = `${occasion} ${description}`.toLowerCase(); const preferred = occasionMap[Object.keys(occasionMap).find(k => text.includes(k))] || [];
+ const warm = ['gold','brown','red','beige'], cool = ['blue','navy','purple','emerald']; const colors = colorWords.filter(c => text.includes(c));
+ const genderTarget = gender === 'nonbinary' || gender === 'prefer_not_to_say' ? null : gender;
+ const occasionKey = Object.keys(occasionMap).find(key => text.includes(key));
+ return [...products].filter(p => !genderTarget || p.gender === genderTarget || p.gender === 'unisex').map(p => { const hay = `${p.name} ${p.category} ${p.color}`.toLowerCase(); let score = p.rank ? 10 - p.rank : 0; if (p.gender === genderTarget) score += 15; if (p.gender === 'unisex') score += 8; if (occasionKey && p.occasion_tags?.split(',').includes(occasionKey)) score += 30; if (preferred.some(x => hay.includes(x))) score += 18; if (colors.some(x => hay.includes(x))) score += 20; if (undertone === 'warm' && warm.some(x => hay.includes(x))) score += 4; if (undertone === 'cool' && cool.some(x => hay.includes(x))) score += 4; for (const word of text.split(/\W+/)) if (word.length > 3 && hay.includes(word)) score += 3; return { ...p, score }; }).sort((a,b) => b.score-a.score).slice(0, limit);
+}

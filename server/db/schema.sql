@@ -1,0 +1,11 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE TABLE IF NOT EXISTS users (id uuid PRIMARY KEY DEFAULT uuid_generate_v4(), guest_token text UNIQUE NOT NULL, created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS uploads (id uuid PRIMARY KEY DEFAULT uuid_generate_v4(), user_id uuid REFERENCES users(id), type text CHECK(type IN ('body','garment')), url text NOT NULL, created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS skin_profile (id uuid PRIMARY KEY DEFAULT uuid_generate_v4(), user_id uuid REFERENCES users(id), upload_id uuid REFERENCES uploads(id), undertone text, tone_value text, raw_response jsonb, created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS sessions (id uuid PRIMARY KEY DEFAULT uuid_generate_v4(), user_id uuid REFERENCES users(id), type text CHECK(type IN ('direct','occasion')), occasion_text text, description_text text, gender text CHECK(gender IN ('woman','man','nonbinary','prefer_not_to_say')), body_upload_id uuid REFERENCES uploads(id), created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS search_results (id uuid PRIMARY KEY DEFAULT uuid_generate_v4(), session_id uuid REFERENCES sessions(id), name text, source_site text, image_url text, buy_url text, price text, category text, color text, gender text CHECK(gender IN ('woman','man','unisex')), occasion_tags text, rank integer, batch_number integer, created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS tryon_results (id uuid PRIMARY KEY DEFAULT uuid_generate_v4(), session_id uuid REFERENCES sessions(id), search_result_id uuid REFERENCES search_results(id), body_upload_id uuid REFERENCES uploads(id), result_image_url text, youcam_request_id text, created_at timestamptz DEFAULT now());
+CREATE TABLE IF NOT EXISTS chat_messages (id uuid PRIMARY KEY DEFAULT uuid_generate_v4(), session_id uuid REFERENCES sessions(id), role text CHECK(role IN ('user','assistant')), content text, resulting_batch_number integer, created_at timestamptz DEFAULT now());
+ALTER TABLE sessions ADD COLUMN IF NOT EXISTS gender text CHECK(gender IN ('woman','man','nonbinary','prefer_not_to_say'));
+ALTER TABLE search_results ADD COLUMN IF NOT EXISTS gender text CHECK(gender IN ('woman','man','unisex'));
+ALTER TABLE search_results ADD COLUMN IF NOT EXISTS occasion_tags text;
